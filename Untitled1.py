@@ -17,11 +17,13 @@ pip install -U sentence-transformers
 
 
 import pandas as pd
-file_name= r"testing (2).xlsx"
-file =   r"training (2).xlsx"
-dtest = pd.read_excel(file_name)
-dtrain = pd.read_excel(file_name)
+import numpy as np
 
+file_name = r"testing (2).xlsx"
+dtest = pd.read_excel(file_name)
+
+name = r"training (2).xlsx"
+dtrain = pd.read_excel(name)
 
 # In[4]:
 
@@ -34,6 +36,10 @@ t5_test=pd.DataFrame(dtest['EmbeddingsLM'].tolist(),index=dtest.index).add_prefi
 
 
 # In[ ]:
+from sentence_transformers import SentenceTransformer
+model=SentenceTransformer('sentence-transformers/sentence-t5-base')
+dtrain['EmbeddingsLM']=dtrain['input'].apply(lambda x:model.encode(str(x)))
+t5_train=pd.DataFrame(dtrain['EmbeddingsLM'].tolist(),index=dtrain.index).add_prefix('embed_')
 
 
 
